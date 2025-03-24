@@ -1,0 +1,32 @@
+SELECT id,
+       title,
+       host_email,
+       organizer_email,
+       privacy,
+       callDate,
+       transcript_url,
+       calendar_id,
+       text,
+       start_time,
+       total_duration,
+       firefly_meeting_id,
+       total_shakudo_talk_time,
+       total_non_shakudo_talk_time,
+       contact_ids,
+       meeting_created_date,
+       meeting_start_time,
+       meeting_end_time,
+       hubspot_meeting_id,
+       meeting_calendar_url,
+       owner_ids,
+       owner_firstnames,
+       hs_analytics_sources,
+       hs_analytics_source_datas_1,
+       hs_analytics_source_datas_2,
+       deal_ids,
+       dealnames,
+       labels
+FROM   (SELECT    *
+        FROM      "hubspot_data"."derived_views"."ff_combined_transcripts" ffct
+        LEFT JOIN "hubspot_data"."derived_views"."fireflies_hubspot_merged" ffhm
+        ON        ffct.id = ffhm.firefly_meeting_id);

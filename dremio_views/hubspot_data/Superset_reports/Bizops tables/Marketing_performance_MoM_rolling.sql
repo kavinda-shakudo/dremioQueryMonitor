@@ -1,0 +1,30 @@
+SELECT    c.campaign_name,
+          ROUND(c.meeting_title_count / NULLIF(c.record_id_count, 0) * 100, 2) AS meeting_rate,
+          (c.total_daily_cost) AS monthly_cost,
+          c.deal_count,
+          c.deal_total_amount,
+          ARRAY_TO_STRING(c.dealname_links, ', ') AS dealname_links,
+          COALESCE(ROUND(p.meeting_title_count / NULLIF(p.record_id_count, 0) * 100, 2), 0) AS previous_meeting_rate,
+          ROUND((c.total_daily_cost - p.total_daily_cost) * 100 / NULLIF(p.total_daily_cost, 0)) AS monthly_cost_percentage_change,
+          COALESCE(CAST(c.deal_count - p.deal_count AS INT), 0) AS deal_count_difference,
+          ROUND(c.meeting_title_count / NULLIF(c.record_id_count, 0) * 100, 2) - COALESCE(ROUND(p.meeting_title_count / NULLIF(p.record_id_count, 0) * 100, 2), 0) AS meeting_rate_difference,
+          ROUND(c.total_daily_cost / NULLIF(c.meeting_title_count, 0), 2) AS current_cost_per_meeting,
+          ROUND((c.total_daily_cost / NULLIF(c.meeting_title_count, 0)) -(p.total_daily_cost / NULLIF(p.meeting_title_count, 0)), 2) AS cost_per_meeting_difference,
+          c.meeting_title_count,
+          c.record_id_count
+FROM      "hubspot_data"."Superset_reports"."Bizops tables"."Marketing 60 days - Final staging" c
+LEFT JOIN "hubspot_data"."Superset_reports"."Bizops tables"."Marketing Weekly - Final staging (previous month view)" p
+ON        c.campaign_name = p.campaign_name
+GROUP BY  c.campaign_name,
+          c.meeting_title_count,
+          c.record_id_count,
+          monthly_cost,
+          c.deal_count,
+          c.deal_total_amount,
+          c.dealname_links,
+          p.record_id_count,
+          p.meeting_title_count,
+          p.total_daily_cost,
+          p.deal_total_amount,
+          p.deal_count,
+          c.total_daily_cost

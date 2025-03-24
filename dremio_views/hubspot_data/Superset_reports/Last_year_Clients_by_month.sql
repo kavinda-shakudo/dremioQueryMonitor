@@ -1,0 +1,1 @@
+SELECT Date_range,total_arr,earliest_date_won,company_name FROM "hubspot_data".reports."Last_year_customer_base_by_month"

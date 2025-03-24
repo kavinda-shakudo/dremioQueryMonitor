@@ -1,0 +1,1 @@
+SELECT * FROM "hubspot_data"."derived_views"."recent_tasks" ORDER BY createdAt DESC
